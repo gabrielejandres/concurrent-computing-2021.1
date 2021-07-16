@@ -33,7 +33,7 @@ void fillExpectedOutputArray() {
 
 // Funcao que as threads irao executar para elevar os elementos do vetor ao quadrado
 void* squareArrayElements(void *arg) {
-	int initialIndex = *((int *) arg); // indice inicial pode ser 1 ou 2, dependendo da thread que esta executando
+  int initialIndex = *((int *) arg); // indice inicial pode ser 1 ou 2, dependendo da thread que esta executando
 
   // A thread 1 vai atualizar os indices impares e a thread 2 vai atualizar os indices pares do vetor
   for (int i=initialIndex; i <= SIZE; i+=2)
@@ -65,30 +65,30 @@ void printArray() {
 // Funcao principal 
 int main(void) {
   int i;
-	pthread_t tid[NTHREADS]; // identificador da thread no sistema
-	int ident[NTHREADS]; // identificador local da thread
+  pthread_t tid[NTHREADS]; // identificador da thread no sistema
+  int ident[NTHREADS]; // identificador local da thread
 
   // Inicializa o array com valores de 1 a SIZE
   initializeArray();
 
-	// Cria as duas threads
-	for(i=0; i < NTHREADS; i++) {
-		ident[i] = i + 1;
-		if (pthread_create(&tid[i], NULL, squareArrayElements, (void *)&ident[i]))
-			printf("Erro ao criar a thread %d! \n", ident[i]);
-	}
+  // Cria as duas threads
+  for(i=0; i < NTHREADS; i++) {
+    ident[i] = i + 1;
+    if (pthread_create(&tid[i], NULL, squareArrayElements, (void *)&ident[i]))
+      printf("Erro ao criar a thread %d! \n", ident[i]);
+  }
 	
-	// Espera as threads terminarem a execução
-	for(i=0; i < NTHREADS; i++) {
+  // Espera as threads terminarem a execução
+  for(i=0; i < NTHREADS; i++) {
     if (pthread_join(tid[i], NULL))
       printf("Erro com o join \n");
-	}
+  }
 
   // Imprime o array resultante
   // printArray();
 	
   // Analisa a corretude do array de saída
-	analyzeOutputCorrectness();
+  analyzeOutputCorrectness();
 
   return 0;
 }
