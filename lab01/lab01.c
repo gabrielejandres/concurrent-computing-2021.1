@@ -33,10 +33,10 @@ void fillExpectedOutputArray() {
 
 // Funcao que as threads irao executar para elevar os elementos do vetor ao quadrado
 void* squareArrayElements(void *arg) {
-  int initialIndex = *((int *) arg); // indice inicial pode ser 1 ou 2, dependendo da thread que esta executando
+  int initialIndex = *((int *) arg) - 1; // indice inicial pode ser 0 ou 1, dependendo da thread que esta executando
 
-  // A thread 1 vai atualizar os indices impares e a thread 2 vai atualizar os indices pares do vetor
-  for (int i=initialIndex; i <= SIZE; i+=2)
+  // A thread 1 (indice 0) vai atualizar os indices pares e a thread 2 (indice 1) vai atualizar os indices impares do vetor
+  for (int i=initialIndex; i < SIZE; i+=2)
     array[i] *= array[i];
 
   pthread_exit(NULL);
