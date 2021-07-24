@@ -158,14 +158,14 @@ int main(int argc, char* argv[]) {
   GET_TIME(start);
   allocateMemoryToMatrices(&firstInputMatrix, &secondInputMatrix, &outputMatrix, size);
   initializeMatrices(&firstInputMatrix, &secondInputMatrix, &outputMatrix, size);
-  showTaskTime(start, "alocacao e inicializacao das matrizes (a)");
+  showTaskTime(start, "alocacao e inicializacao das estruturas de dados (a)");
 
   // Multiplicacao das matrizes (parte concorrente)
 
   // (b) Criacao das threads, execucao da multiplicacao e espera pelo termino das threads
   GET_TIME(start);
 
-  // (b) - Parte 1: Alocacao das estruturas de dados
+  // Alocacao das estruturas de dados
   tid = (pthread_t*) malloc(sizeof(pthread_t)*nthreads);
   if (tid == NULL) {
     puts("Erro de alocacao de memoria para o vetor de identificadores das threads");
@@ -178,7 +178,7 @@ int main(int argc, char* argv[]) {
     return 2;
   }
 
-  // (b) - Parte 2: Criacao das threads
+  // Criacao das threads
   createThreads(&args, &tid, size);
   showTaskTime(start, "criacao das threads e execucao da multiplicacao (b)");
 
