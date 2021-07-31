@@ -90,7 +90,37 @@ void* findMinAndMaxElementsConc(void *arg) {
 
   // retorna as informacoes do array
   pthread_exit((void *) concMaxMin);
+} 
+
+/* Funcao alternativa de execucao para as threads. O desempenho com ela ficou um pouco pior
+void* findMinAndMaxElementsConc(void *arg) {
+  long int id = (long int) arg; // identificador da thread
+
+  // Alocacao da estrutura de retorno da thread
+  infoArray *concMaxMin; // armazena o maior e menor elementos encontrados
+  concMaxMin = (infoArray *) malloc(sizeof(infoArray)); 
+  if(concMaxMin == NULL){
+      fprintf(stderr, "Erro na alocacao para a estrutura de saida \n"); 
+      exit(1);
+  }
+
+  // Inicializando o maior e menor elemento como sendo o primeiro elemento do bloco da thread
+  concMaxMin->max = concMaxMin->min = array[id];
+
+  // Percorre o bloco da thread para encontrar o maior e menor do bloco
+  for (long long int i = id; i < numElements; i+=nthreads) {
+    if (array[i] > concMaxMin->max) {
+      concMaxMin->max = array[i];
+    }
+    if (array[i] < concMaxMin->min) {
+      concMaxMin->min = array[i];
+    }
+  }
+
+  // retorna as informacoes do array
+  pthread_exit((void *) concMaxMin);
 }
+*/
 
 // Funcao para criar as threads
 void createThreads(pthread_t **tid, int numThreads) {
