@@ -3,8 +3,17 @@
 
 ## Tabela de Conteúdo
 
- 1. [Tempos de execução](#tempos-de-execução)
- 2. [Ganho de desempenho](#ganho-de-desempenho)
+1. [Configurações do hardware](#configurações-do-hardware)
+2. [Tempos de execução](#tempos-de-execução)
+3. [Ganho de desempenho](#ganho-de-desempenho)
+
+## Configurações do hardware
+*Para rodar o programa, foi utilizado o subsistema Windows para Linux (WSL), que é um módulo do sistema operacional Windows 10, que visa disponibilizar um ambiente Linux compatível no sistema da Microsoft.*
+
+- Host: Windows 10 Home 64 bits
+- Distro: Ubuntu 20.04.2 LTS
+- Processador: Intel(R) Core(TM) i5-7200U Dual Core
+- Memória: 8GB RAM
 
 ## Tempos de execução
 
