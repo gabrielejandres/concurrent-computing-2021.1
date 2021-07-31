@@ -172,7 +172,7 @@ int main(int argc, char* argv[]) {
     return 2;
   }
 
-  args = (tArgs*) malloc(sizeof(pthread_t)*nthreads);
+  args = (tArgs*) malloc(sizeof(tArgs)*nthreads);
   if (args == NULL) {
     puts("Erro de alocacao de memoria");
     return 2;
