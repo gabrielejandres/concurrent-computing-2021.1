@@ -138,8 +138,6 @@ void joinThreads(pthread_t *tids, int numThreads, int **sumElementsOfArray) {
     }
     (*sumElementsOfArray)[i] = *threadReturn;
   }
-
-  free(threadReturn);
 }
 
 // Funcao para desalocar variaveis
