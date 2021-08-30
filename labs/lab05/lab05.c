@@ -35,7 +35,7 @@ void initializeArray(int **inputArray, int numElements) {
   }
 }
 
-//funcao barreira
+// Funcao barreira
 void barrier(int nthreads, int threadId, int barrierId) {
     pthread_mutex_lock(&mutex);
     // Quando a ultima thread chegar na barreira ela pode sinalizar que as outras que estao aguardando podem prosseguir
@@ -54,7 +54,7 @@ void barrier(int nthreads, int threadId, int barrierId) {
     pthread_mutex_unlock(&mutex);
 }
 
-//funcao das threads
+// Funcao das threads
 void *sumAndUpdateArrayElements(void *arg) {
   long int id = (long int) arg; // identificador da thread
   int *localSum; // variavel local de soma de elementos
