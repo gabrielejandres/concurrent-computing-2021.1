@@ -59,9 +59,6 @@ void *sumAndUpdateArrayElements(void *arg) {
   long int id = (long int) arg; // identificador da thread
   int *localSum; // variavel local de soma de elementos
 
-  // Objetiva inicializar o gerador de números aleatórios com o valor da função time(NULL)
-  srand(time(NULL));
-
   localSum = (int *) malloc(sizeof(int));
   if (localSum == NULL) {
     fprintf(stderr, "Erro na alocacao para a soma local");
