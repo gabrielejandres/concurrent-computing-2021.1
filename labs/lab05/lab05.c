@@ -156,7 +156,7 @@ int main(int argc, char *argv[]) {
     printf("Comando incorreto. Digite: %s <numero de threads> \n", argv[0]);
     return 1;
   }
-  size = atol(argv[1]);
+  size = atoi(argv[1]);
 
   // Alocacao para o array de somas
   allocateMemoryToArray(&sumElementsOfArray, size);
