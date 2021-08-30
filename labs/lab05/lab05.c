@@ -65,7 +65,7 @@ void *sumAndUpdateArrayElements(void *arg) {
   localSum = (int *) malloc(sizeof(int));
   if (localSum == NULL) {
     fprintf(stderr, "Erro na alocacao para a soma local");
-    exit(1);
+    exit(3);
   }
   *localSum = 0;
 
@@ -111,7 +111,7 @@ void checkOutputCorrectness(int *sumElementsOfArray) {
     printf("Thread %d: %d \n", i, sumElementsOfArray[i]);
     if (sumElementsOfArray[i] != reference) {
       printf("\nOs valores das somas calculadas pelas threads %d e %d divergem!\n", i, 0);
-      exit(5);
+      exit(4);
     }
   }
   printf("\nTodas as threads calcularam o mesmo valor de soma!\n");
@@ -122,7 +122,7 @@ void createThreads(pthread_t *tids, int numThreads) {
   for(long int i = 0; i < size; i++) {
     if (pthread_create(tids + i, NULL, sumAndUpdateArrayElements, (void *) i)) {
       printf("Erro na criacao das threads \n");
-      exit(1);
+      exit(5);
     }
   }
 }
@@ -134,10 +134,12 @@ void joinThreads(pthread_t *tids, int numThreads, int **sumElementsOfArray) {
   for (int i = 0; i < size; i++) {
     if (pthread_join(*(tids + i), (void **) &threadReturn)) {
       printf("Erro no join das threads \n");
-      exit(2);
+      exit(6);
     }
     (*sumElementsOfArray)[i] = *threadReturn;
   }
+
+  free(threadReturn);
 }
 
 // Funcao para desalocar variaveis
@@ -172,6 +174,10 @@ int main(int argc, char *argv[]) {
   joinThreads(tids, size, &sumElementsOfArray);
   checkOutputCorrectness(sumElementsOfArray);
   destroy(&mutex, &condition);
+
+  free(array);
+  free(sumElementsOfArray);
+  free(tids);
 
   return 0;
 }
