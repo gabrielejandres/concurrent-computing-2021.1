@@ -1,4 +1,3 @@
-
 /*
      * Programa: Algoritmo concorrente para contar o numero de elementos pares em um vetor
      * Aluna: Gabriele Jandres Cavalcanti | DRE: 119159948
