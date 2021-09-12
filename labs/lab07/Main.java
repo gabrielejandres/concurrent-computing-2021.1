@@ -76,23 +76,19 @@ class Reader extends Thread {
 	// Metodo auxiliar para verificar se um numero eh primo
 	public void isPrimeNumber(int number) {
 		if (number == 0) {
-			System.out.println("print('O elemento central tem valor " + number + " e nao eh primo')");
+			System.out.println("# O elemento central tem valor " + number + " e nao eh primo");
 			return;
 		}
 
 		for (int i = 2; i < number; i++) {
 			if (number % i == 0) {
-				System.out.println("print('O elemento central tem valor " + number + " e nao eh primo')");
+				System.out.println("# O elemento central tem valor " + number + " e nao eh primo");
 				return;
 			}
 		}
 
-		System.out.println("print('O elemento central tem valor " + number + " e eh primo')");
+		System.out.println("# O elemento central tem valor " + number + " e eh primo");
 	}
-
-	public synchronized int getCentralElement() {
-    return Main.getCentralElement();
-  }
 
 	// Método executado pela thread
 	@Override
@@ -100,65 +96,9 @@ class Reader extends Thread {
 		try {
 			for (int i = 0; i < Main.INTERACTIONS; i++) {
 				this.monitor.EnterReader(this.id);
-				isPrimeNumber(getCentralElement());
-				System.out.println("print('Thread leitora " + this.id + " leu')");
+				isPrimeNumber(Main.getCentralElement());
+				System.out.println("# Thread leitora " + this.id + " leu");
 				this.monitor.LeaveReader(this.id);
-				sleep(this.delay);
-			}
-		} catch (InterruptedException e) {
-			System.err.println(e);
-			return;
-		}
-	}
-}
-
-// Thread escritora
-class ReaderAndWriter extends Thread {
-	int id; // identificador da thread
-	int delay; // atraso
-	Monitor monitor; // objeto monitor para coordenar a lógica de execução das threads
-
-	// Construtor
-	ReaderAndWriter(int id, int delayTime, Monitor m) {
-		this.id = id;
-		this.delay = delayTime;
-		this.monitor = m;
-	}
-
-	// Metodo auxiliar para verificar se um numero eh par ou impar
-	public void checkParity(int number) {
-		if (number % 2 == 0) {
-			System.out.println("print('O elemento central tem valor " + number + " e eh par')");
-			return;
-		}
-		System.out.println("print('O elemento central tem valor " + number + " e eh impar')");
-	}
-
-	public synchronized void setCentralElement() {
-    Main.setCentralElement(2 * Main.getCentralElement());
-  }
-
-	public synchronized int getCentralElement() {
-    return Main.getCentralElement();
-  }
-
-	// Método executado pela thread
-	@Override
-	public void run() {
-		try {
-			for (int i = 0; i < Main.INTERACTIONS; i++) {
-				// leitura
-				this.monitor.EnterReader(this.id);
-				checkParity(getCentralElement());
-				System.out.println("print('Thread leitora e escritora " + this.id + " leu')");
-				this.monitor.LeaveReader(this.id);
-				sleep(this.delay);
-
-				// escrita
-				this.monitor.EnterWriter(this.id);
-				setCentralElement();
-				System.out.println("print('Thread leitora e escritora " + this.id + " escreveu')");
-				this.monitor.LeaveWriter(this.id);
 				sleep(this.delay);
 			}
 		} catch (InterruptedException e) {
@@ -181,17 +121,61 @@ class Writer extends Thread {
 		this.monitor = m;
 	}
 
-	public synchronized void setCentralElement(int number) {
-    Main.setCentralElement(number);
-  }
-
 	// Método executado pela thread
 	public void run() {
 		try {
 			for (int i = 0; i < Main.INTERACTIONS; i++) {
 				this.monitor.EnterWriter(this.id);
-				setCentralElement(this.id);
-				System.out.println("print('Thread escritora " + this.id + " escreveu')");
+				Main.setCentralElement(this.id);
+				System.out.println("# Thread escritora " + this.id + " escreveu");
+				this.monitor.LeaveWriter(this.id);
+				sleep(this.delay);
+			}
+		} catch (InterruptedException e) {
+			System.err.println(e);
+			return;
+		}
+	}
+}
+
+// Thread leitora/escritora
+class ReaderAndWriter extends Thread {
+	int id; // identificador da thread
+	int delay; // atraso
+	Monitor monitor; // objeto monitor para coordenar a lógica de execução das threads
+
+	// Construtor
+	ReaderAndWriter(int id, int delayTime, Monitor m) {
+		this.id = id;
+		this.delay = delayTime;
+		this.monitor = m;
+	}
+
+	// Metodo auxiliar para verificar se um numero eh par ou impar
+	public void checkParity(int number) {
+		if (number % 2 == 0) {
+			System.out.println("# O elemento central tem valor " + number + " e eh par");
+			return;
+		}
+		System.out.println("# O elemento central tem valor " + number + " e eh impar");
+	}
+
+	// Método executado pela thread
+	@Override
+	public void run() {
+		try {
+			for (int i = 0; i < Main.INTERACTIONS; i++) {
+				// leitura
+				this.monitor.EnterReader(this.id);
+				checkParity(Main.getCentralElement());
+				System.out.println("# Thread leitora e escritora " + this.id + " leu");
+				this.monitor.LeaveReader(this.id);
+				sleep(this.delay);
+
+				// escrita
+				this.monitor.EnterWriter(this.id);
+				Main.setCentralElement(2 * Main.getCentralElement());
+				System.out.println("# Thread leitora e escritora " + this.id + " escreveu");
 				this.monitor.LeaveWriter(this.id);
 				sleep(this.delay);
 			}
@@ -226,7 +210,7 @@ class Main {
 		Writer[] writers = new Writer[WRITERS]; // Threads escritoras
 		ReaderAndWriter[] readersAndWriters = new ReaderAndWriter[RW]; // Threads leitoras e escritoras
 
-		// inicia o log de saida
+		// Inicia o log de saida
 		System.out.println("import verificaLE");
 		System.out.println("le = verificaLE.LE()");
 
@@ -242,7 +226,7 @@ class Main {
 			writers[i].start();
 		}
 
-		// Cria os escritores
+		// Cria os leitores/escritores
 		for (int i = 0; i < RW; i++) {
 			readersAndWriters[i] = new ReaderAndWriter(i + 1, (i + 1) * 500, monitor);
 			readersAndWriters[i].start();
