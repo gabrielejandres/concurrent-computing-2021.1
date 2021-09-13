@@ -1,5 +1,5 @@
 /*
-	* Programa: Aplicacao concorrente em Java usando o padrao leitores/escritores
+	* Programa: Aplicacao concorrente usando o padrao leitores/escritores para acessar uma variavel compartilhada
 	* Aluna: Gabriele Jandres Cavalcanti | DRE: 119159948
 	* Disciplina: Computacao Concorrente - 2021.1
 	* Modulo 2 - Laboratorio 7
@@ -9,6 +9,17 @@
 // Monitor que implementa a logica do padrao leitores/escritores
 class Monitor {
 	private int reading, writing;
+	private int centralElement = 0; // recurso compartilhado entre as threads
+
+	// Getter para a variavel compartilhada
+	public synchronized int getCentralElement() {
+		return this.centralElement;
+	}
+
+	// Setter para a variavel compartilhada
+	public synchronized void setCentralElement(int number) {
+		this.centralElement = number;
+	}
 
 	// Construtor
 	Monitor() {
@@ -96,7 +107,7 @@ class Reader extends Thread {
 		try {
 			for (int i = 0; i < Main.INTERACTIONS; i++) {
 				this.monitor.EnterReader(this.id);
-				isPrimeNumber(Main.getCentralElement());
+				isPrimeNumber(this.monitor.getCentralElement());
 				System.out.println("# Thread leitora " + this.id + " leu");
 				this.monitor.LeaveReader(this.id);
 				sleep(this.delay);
@@ -126,8 +137,8 @@ class Writer extends Thread {
 		try {
 			for (int i = 0; i < Main.INTERACTIONS; i++) {
 				this.monitor.EnterWriter(this.id);
-				Main.setCentralElement(this.id);
-				System.out.println("# Thread escritora " + this.id + " escreveu");
+				this.monitor.setCentralElement(this.id);
+				System.out.println("# Thread escritora " + this.id + " escreveu: " + this.id);
 				this.monitor.LeaveWriter(this.id);
 				sleep(this.delay);
 			}
@@ -165,18 +176,17 @@ class ReaderAndWriter extends Thread {
 	public void run() {
 		try {
 			for (int i = 0; i < Main.INTERACTIONS; i++) {
-				// leitura
+				// leitura (mesma logica da thread leitora)
 				this.monitor.EnterReader(this.id);
-				checkParity(Main.getCentralElement());
+				checkParity(this.monitor.getCentralElement());
 				System.out.println("# Thread leitora e escritora " + this.id + " leu");
 				this.monitor.LeaveReader(this.id);
-				sleep(this.delay);
-
-				// escrita
+				// escrita (mesma logica da thread escritora)
 				this.monitor.EnterWriter(this.id);
-				Main.setCentralElement(2 * Main.getCentralElement());
-				System.out.println("# Thread leitora e escritora " + this.id + " escreveu");
+				this.monitor.setCentralElement(2 * this.monitor.getCentralElement());
+				System.out.println("# Thread leitora e escritora " + this.id + " escreveu: " + this.monitor.getCentralElement());
 				this.monitor.LeaveWriter(this.id);
+
 				sleep(this.delay);
 			}
 		} catch (InterruptedException e) {
@@ -188,21 +198,10 @@ class ReaderAndWriter extends Thread {
 
 // Classe principal
 class Main {
-	public static final int INTERACTIONS = 10; // total de interacoes das threads
-	private static final int READERS = 4; // total de threads leitoras
-	private static final int WRITERS = 3; // total de threads escritoras
-	private static final int RW = 3; // total de threads leitoras e escritoras
-	private static int centralElement = 0; // recurso compartilhado entre as threads
-
-	// Getter para a variavel compartilhada
-	public static int getCentralElement() {
-		return centralElement;
-	}
-
-	// Setter para a variavel compartilhada
-	public static void setCentralElement(int number) {
-		centralElement = number;
-	}
+	public static final int INTERACTIONS = 10; // total de interacoes das threads (limite para nao executar infinitamente)
+	private static final int READERS = 5; // total de threads leitoras
+	private static final int WRITERS = 5; // total de threads escritoras
+	private static final int RW = 5; // total de threads leitoras e escritoras
 
 	public static void main(String[] args) {
 		Monitor monitor = new Monitor(); // Monitor (objeto compartilhado entre leitores e escritores)
