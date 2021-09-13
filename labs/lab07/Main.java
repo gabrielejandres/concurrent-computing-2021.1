@@ -184,7 +184,8 @@ class ReaderAndWriter extends Thread {
 				// escrita (mesma logica da thread escritora)
 				this.monitor.EnterWriter(this.id);
 				this.monitor.setCentralElement(2 * this.monitor.getCentralElement());
-				System.out.println("# Thread leitora e escritora " + this.id + " escreveu: " + this.monitor.getCentralElement());
+				System.out
+						.println("# Thread leitora e escritora " + this.id + " escreveu: " + this.monitor.getCentralElement());
 				this.monitor.LeaveWriter(this.id);
 
 				sleep(this.delay);
