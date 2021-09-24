@@ -57,14 +57,14 @@ void *printPleaseSit (void *t) {
 
 // Funcao para criar as threads
 void createThreads(pthread_t *tids, int numThreads) {
-  int error;
+  int errorT0, errorT1, errorT2, errorT3;
 
-  error = pthread_create(&tids[3], NULL, printFeelFree, NULL);
-  error = pthread_create(&tids[2], NULL, printWelcome, NULL);
-  error = pthread_create(&tids[1], NULL, printComeBack, NULL);
-  error = pthread_create(&tids[0], NULL, printPleaseSit, NULL);
+  errorT3 = pthread_create(&tids[3], NULL, printFeelFree, NULL);
+  errorT2 = pthread_create(&tids[2], NULL, printWelcome, NULL);
+  errorT1 = pthread_create(&tids[1], NULL, printComeBack, NULL);
+  errorT0 = pthread_create(&tids[0], NULL, printPleaseSit, NULL);
 
-  if (error) {
+  if (errorT3 || errorT2 || errorT1 || errorT0) {
     fprintf(stderr, "Erro na criacao das threads \n");
     exit(1);
   }
