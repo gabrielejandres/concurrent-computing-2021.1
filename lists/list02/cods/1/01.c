@@ -58,7 +58,7 @@ void *tarefa(void *arg) {
       barreira(nthreads - salto, id);
       vetor[id] = aux + vetor[id];
       printf("vetor[%d] = %d \n", id, vetor[id]);
-      // barreira(nthreads - salto, id);
+      barreira(nthreads - salto, id);
     }
     else
       break;
@@ -102,13 +102,13 @@ int main(int argc, char *argv[]) {
     return 2;
   }
 
-  for (int j = 0; j < nthreads; j++) {
-    vetor[j] = j + 1;
-  }
-  // vetor[0] = 1;
-  // vetor[1] = 4;
-  // vetor[2] = -1;
-  // vetor[3] = 7;
+  // for (int j = 0; j < nthreads; j++) {
+  //   vetor[j] = j + 1;
+  // }
+  vetor[0] = 1;
+  vetor[1] = 4;
+  vetor[2] = -1;
+  vetor[3] = 7;
 
   seq(vetor, nthreads);
   
