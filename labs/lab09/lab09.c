@@ -39,11 +39,13 @@ void insertInBuffer(int item, int id) {
   sem_wait(&emptySlot); // aguarda slot vazio
   sem_wait(&mutexProd); // exclusao mutua entre produtores
   buffer[in] = item;
-  printf("Elemento %d inserido \n", item);
+  printf("# Elemento %d inserido \n", item);
+  printf("checker.insertInBuffer(%d, %d)\n", id, item);
 
   // sinaliza que o buffer está cheio quando o último elemento foi inserido
   if (in == (N - 1)) {
-    printf("Produtora %d sinalizou que o buffer esta cheio \n", id);
+    printf("# Produtora %d sinalizou que o buffer esta cheio \n", id);
+    printf("checker.sinalizeFullBuffer(%d)\n", id);
     sem_post(&fullBuffer);
   }
 
@@ -55,10 +57,11 @@ void insertInBuffer(int item, int id) {
 void removeFromBuffer(int id) {
   int item;
   sem_wait(&fullBuffer); // aguarda buffer cheio
-  printf("Consumidora %d vai consumir o buffer \n", id);
+  printf("# Consumidora %d vai consumir o buffer \n", id);
+  printf("checker.readBuffer(%d)\n", id);
   for(int i = 0; i < N; i++) {
     item = buffer[i];
-    printf("Elemento %d retirado \n", item);
+    printf("# Elemento %d retirado \n", item);
     sem_post(&emptySlot); // sinaliza um slot vazio para cada posicao do buffer que consome
   }
 }
@@ -150,6 +153,9 @@ int main(int argc, char *argv[]) {
 
   numProducers = atoi(argv[1]);
 	numConsumers = atoi(argv[2]);
+
+  printf("import checkProdCons\n");
+  printf("checker = checkProdCons.PRODCONS()\n");
 
   srand(time(NULL));
   initializeBuffer(N);
